@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MultipleChoiceTool.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,12 +27,25 @@ namespace MultipleChoiceTool
 
         private void Btn_Login_Click(object sender, EventArgs e)
         {
-            Username = Tb_UserName.Text;
+            var username = Tb_UserName.Text;
             var password = Tb_Password.Text;
 
-            var main = new Main();
-            main.ShowDialog();
+            var user = new RegisterUser();
+            var currentUser = user.GetCurrentUser(username);
+            var pswd = user.encodePassword(password);
+
+            if (currentUser.Username.Equals(username) && currentUser.Password.Equals(pswd))
+            {
+                var main = new Main(username);
+                main.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Benutzername oder Password falsch!", "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
         }
+
+        
 
         private void Br_Register_Click(object sender, EventArgs e)
         {

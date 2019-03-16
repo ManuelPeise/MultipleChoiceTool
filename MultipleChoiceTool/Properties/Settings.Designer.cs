@@ -25,8 +25,7 @@ namespace MultipleChoiceTool.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\manue\\source\\repos\\MultipleChoiceTool\\MultipleChoiceTool\\bin\\Debug\\Confi" +
-            "g")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Github\\MultipleChoiceTool\\MultipleChoiceTool\\bin\\Debug\\Config\\Appuser.xml")]
         public string UserXml {
             get {
                 return ((string)(this["UserXml"]));

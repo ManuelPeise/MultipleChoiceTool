@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="UserXml" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Users\manue\source\repos\MultipleChoiceTool\MultipleChoiceTool\bin\Debug\Config</Value>
+      <Value Profile="(Default)">D:\Github\MultipleChoiceTool\MultipleChoiceTool\bin\Debug\Config\Appuser.xml</Value>
     </Setting>
     <Setting Name="Key_1" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2</Value>

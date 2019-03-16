@@ -12,6 +12,13 @@ namespace MultipleChoiceTool.Classes
 {
     public class RegisterUser
     {
+        private Func<RegisterUser> p;
+
+        public RegisterUser()
+        {
+
+        }
+        
         private List<User> Users { get; set; } = new List<User>();
         private string Path { get; set; } = "Config\\Appuser.xml";
         
@@ -57,9 +64,10 @@ namespace MultipleChoiceTool.Classes
         {
             var path = Properties.Settings.Default.UserXml;
             var users = new List<User>();
-            if (File.Exists(Path))
+
+            if (File.Exists(path))
             {
-                var document = XDocument.Load(Path);
+                var document = XDocument.Load(path);
 
                 users = (from x in document.Descendants("User")
                              select new User
@@ -74,6 +82,14 @@ namespace MultipleChoiceTool.Classes
             }
             
            return users;
+        }
+
+        public User GetCurrentUser(string name)
+        {
+            var users = GetUser();
+
+            return users.Where(x => x.Username.Equals(name)).First();
+
         }
 
         public void RegisterNewUser(Register reg, string name, string firstname, string username, string pswd)
