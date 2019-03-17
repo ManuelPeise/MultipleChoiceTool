@@ -12,31 +12,24 @@ namespace MultipleChoiceTool.Classes
 {
     public class RegisterUser
     {
-        private Func<RegisterUser> p;
-
-        public RegisterUser()
-        {
-
-        }
-        
-        private List<User> Users { get; set; } = new List<User>();
-        private string Path { get; set; } = "Config\\Appuser.xml";
+        private UserData Users { get; set; } = new UserData();
+        private string Path { get; set; } = "D:\\Github\\MultipleChoiceTool\\MultipleChoiceTool\\Files\\User\\Appuser.xml";
         
         private void RegisterNewUser(string lastname, string firstname, string password)
         {
-            Users.Clear();
+            Users.User.Clear();
             Users = GetUser();
             var securedPassword = encodePassword(password);
 
             var user = new User
             {
-                Id = Users.Count() + 1,
+                Id = Users.User.Count() + 1,
                 Lastname = lastname,
                 Firstname = firstname,
                 Password = securedPassword
             };
 
-            Users.Add(user);
+            Users.User.Add(user);
         }
 
         public string encodePassword(string password)
@@ -60,16 +53,16 @@ namespace MultipleChoiceTool.Classes
             return pswd; 
         }
 
-        private List<User> GetUser()
+        private UserData GetUser()
         {
             var path = Properties.Settings.Default.UserXml;
-            var users = new List<User>();
-
-            if (File.Exists(path))
+            var users = new UserData();
+            
+            if (File.Exists(Path))
             {
-                var document = XDocument.Load(path);
-
-                users = (from x in document.Descendants("User")
+                var document = XDocument.Load(Path);
+                
+                var user = (from x in document.Descendants("User")
                              select new User
                              {
                                  Id = Convert.ToInt32(x.Attribute("Id").Value),
@@ -79,6 +72,8 @@ namespace MultipleChoiceTool.Classes
                                  Password = x.Attribute("Password").Value
 
                              }).ToList();
+                
+                users.User = user;
             }
             
            return users;
@@ -88,45 +83,60 @@ namespace MultipleChoiceTool.Classes
         {
             var users = GetUser();
 
-            return users.Where(x => x.Username.Equals(name)).First();
+            return users.User.Where(x => x.Username.Equals(name)).First();
 
         }
 
         public void RegisterNewUser(Register reg, string name, string firstname, string username, string pswd)
         {
-            Users.Clear();
-            Users = GetUser();
+            var usernames = new List<string>();
+            var users  = new UserData();
+            users = GetUser();
 
             var password = encodePassword(pswd);
 
             var user = new User
             {
-                Id = Users.Count + 1,
+                Id = users.User != null ? Users.User.Count +1 : 1,
                 Lastname = name,
                 Firstname = firstname,
                 Username = username,
                 Password = password
             };
-            var usernames = Users.Select(x => x.Username).ToList();
+
+            var meta = new MetaData
+            {
+                Description = "Userlist",
+                Creationdate = DateTime.Now.ToShortDateString(),
+                System = "Multiple Choice Trainer",
+                Version = "1.0"
+            };
+
+            if (users.User != null)
+            {
+                usernames = Users.User.Select(x => x.Username).ToList();
+            }
+
 
             if (!usernames.Contains(user.Username))
             {
-                Users.Add(user);
+                users.User.Add(user);
             }
             else
             {
                 MessageBox.Show($"Der Benutzername {user.Username} ist nicht verfügbar!");
                 reg.Tb_Username.BackColor = Color.Red;
             }
+            users.MetaData = meta;
 
-            SerializeUser(Users);
+            SerializeUser(users);
         }
 
-        private void SerializeUser(List<User> users)
+        private void SerializeUser(UserData users)
         {
             using (var stream = new FileStream(Path, FileMode.Create, FileAccess.Write))
             {
-                var serializer = new XmlSerializer(typeof(List<User>));
+                var serializer = new XmlSerializer(typeof(UserData));
                 serializer.Serialize(stream, users);
             }
         }

@@ -8,18 +8,15 @@ using System.Xml.Serialization;
 namespace MultipleChoiceTool.Models
 {
     [Serializable]
-    public class MetaData
+    public class FolderConfiguration
     {
         [XmlAttribute]
-        public string Description { get; set; }
+        public string ConfigurationFolder { get; set; }
         [XmlAttribute]
-        public string Topic { get; set; }
+        public string NewTestFolder { get; set; }
         [XmlAttribute]
-        public string Creationdate { get; set; }
+        public string TestFolder { get; set; }
         [XmlAttribute]
-        public string System { get; set; }
-        [XmlAttribute]
-        public string Version { get; set; }
-
+        public string UserFolder { get; set; }
     }
 }
